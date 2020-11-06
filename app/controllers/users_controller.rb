@@ -16,6 +16,16 @@ class UsersController < ApplicationController
   def edit
   end
 
+  def create
+    if @user.save
+      NotificationMailer.thanks_mail(@user).deliver
+      render "show"
+    else
+      redirect_to require.referer
+    end
+  end
+
+
   def update
     if @user.update(user_params)
       redirect_to user_path(@user), notice: "You have updated user successfully."
